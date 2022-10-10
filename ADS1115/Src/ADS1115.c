@@ -96,15 +96,15 @@ uint16_t ADS1115_getConversionPolled(signalADS1115 * signalADS1115_port,uint8_t 
 	uint8_t wordWrite [3]={0};
 	uint16_t wordRead;
 	uint8_t wordReading[2];
-	bool convirtiendo=false;
+	bool isConversionReady=false;
 
 	  //-----------------------------------
 	  //-------CONSULTANDO PIN READY-------
 
-	  while(convirtiendo==false){
+	  while(isConversionReady==false){
 
 		  if(ADS1115_gpioReadyRead()==true){
-			  convirtiendo=true;
+			  isConversionReady=true;
 		  }
 	  }
 	  //-----------------------------------

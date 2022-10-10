@@ -41,11 +41,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  18 .debug_line   00011eb5  00000000  00000000  000561f7  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000e3409  00000000  00000000  000680ac  2**0
+ 19 .debug_str    000e340e  00000000  00000000  000680ac  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000050  00000000  00000000  0014b4b5  2**0
+ 20 .comment      00000050  00000000  00000000  0014b4ba  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00002ef4  00000000  00000000  0014b508  2**2
+ 21 .debug_frame  00002ef4  00000000  00000000  0014b50c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -589,14 +589,14 @@ uint16_t ADS1115_getConversionPolled(signalADS1115 * signalADS1115_port,uint8_t 
  80006a8:	74bb      	strb	r3, [r7, #18]
 	uint16_t wordRead;
 	uint8_t wordReading[2];
-	bool convirtiendo=false;
+	bool isConversionReady=false;
  80006aa:	2300      	movs	r3, #0
  80006ac:	75fb      	strb	r3, [r7, #23]
 
 	  //-----------------------------------
 	  //-------CONSULTANDO PIN READY-------
 
-	  while(convirtiendo==false){
+	  while(isConversionReady==false){
  80006ae:	e006      	b.n	80006be <ADS1115_getConversionPolled+0x2a>
 
 		  if(ADS1115_gpioReadyRead()==true){
@@ -604,10 +604,10 @@ uint16_t ADS1115_getConversionPolled(signalADS1115 * signalADS1115_port,uint8_t 
  80006b4:	4603      	mov	r3, r0
  80006b6:	2b00      	cmp	r3, #0
  80006b8:	d001      	beq.n	80006be <ADS1115_getConversionPolled+0x2a>
-			  convirtiendo=true;
+			  isConversionReady=true;
  80006ba:	2301      	movs	r3, #1
  80006bc:	75fb      	strb	r3, [r7, #23]
-	  while(convirtiendo==false){
+	  while(isConversionReady==false){
  80006be:	7dfb      	ldrb	r3, [r7, #23]
  80006c0:	f083 0301 	eor.w	r3, r3, #1
  80006c4:	b2db      	uxtb	r3, r3
