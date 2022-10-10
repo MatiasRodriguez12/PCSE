@@ -11,24 +11,6 @@
 
 UART_HandleTypeDef UartHandle;
 
-/* Private function prototypes -----------------------------------------------*/
-#ifdef __GNUC__
-/* With GCC, small printf (option LD Linker->Libraries->Small printf
-   set to 'Yes') calls __io_putchar() */
-#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
-#else
-#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
-#endif /* __GNUC__ */
-
-PUTCHAR_PROTOTYPE
-{
-  /* Place your implementation of fputc here */
-  /* e.g. write a character to the USART3 and Loop until the end of transmission */
-  HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 0xFFFF);
-
-  return ch;
-}
-
 
 /* Inicia la comunicación UART.
  * Envía mensaje indicando los parametros de su configuración.
@@ -102,7 +84,7 @@ void uartSendStringSize(uint8_t * pstring, uint16_t size){
 	HAL_UART_Transmit(&UartHandle,(uint8_t*) pstring,size, timeOutUart);
 }
 
-void sendADS1115toUart(float voltage[3]){
+void sendADS1115ByUart(float voltage[3]){
 	  float decimal=0.0;
 	  char voltajeChar[6];
 	  char dec[4];

@@ -54,6 +54,6 @@ void uartSendStringSize(uint8_t * pstring, uint16_t size);
  * Esta función no esta desarrollada en este proyecto.*/
 void uartReceiveStringSize(uint8_t * pstring, uint16_t size);
 
-void sendADS1115toUart(float voltage[4]);
+void sendADS1115ByUart(float voltage[4]);
 
 #endif /* API_INC_API_UART_H_ */

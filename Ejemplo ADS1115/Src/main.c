@@ -70,35 +70,39 @@ int main(void)
   /* Initialize BSP PB for BUTTON_USER */
   BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO);
 
+  /*Se declaran las estructuras para los canales de conversión*/
   signalADS1115 channelCero;
   signalADS1115 channelUno;
   signalADS1115 channelDos;
 
+  /*Se declara una estructura auxiliar para recorrer un bucle for*/
   signalADS1115 channels;
 
+  /*Se inicializa los puertos I2C, UART y puerto de lectura para señal READY.*/
   I2CGpio_init();
   uartInit();
+  ADS1115_gpioReadyInit();
 
+  /*Palabra donde se almacenará el resultado de la conversión.*/
   uint16_t wordReading;
 
+  /*Array de 3 elementos utilizados para conversión de cada canal en Nro de cuenta a Volts.*/
   float voltage[3]={0.1,0.1,0.1};
-
 
   //-------------------------------------------
   //EJEMPLO FUNCIONAMIENTO SIN PIN READY
-/*
-  ADS1115_channelInit(&channelCero,SINGLE_MODE_A0);
-  ADS1115_channelInit(&channelUno,SINGLE_MODE_A1);
-  ADS1115_channelInit(&channelDos,DIFERENTIAL_MODE_A2_A3);*/
+
+  //ADS1115_channelInit(&channelCero,SINGLE_MODE_A0);
+  //ADS1115_channelInit(&channelUno,SINGLE_MODE_A1);
+  //ADS1115_channelInit(&channelDos,DIFERENTIAL_MODE_A2_A3);
   //-------------------------------------------
 
   //-------------------------------------------
   //EJEMPLO FUNCIONAMIENTO CON PIN READY
+
   ADS1115_channelInitPolled(&channelCero,SINGLE_MODE_A0,SLAVE_ADRRES_GND);
   ADS1115_channelInitPolled(&channelUno,SINGLE_MODE_A1,SLAVE_ADRRES_GND);
   ADS1115_channelInitPolled(&channelDos,DIFERENTIAL_MODE_A2_A3,SLAVE_ADRRES_GND);
-  gpioADS1115Ready_init();
- // bool convirtiendo=false;
   //-------------------------------------------
 
   //----------------------------------------------
@@ -106,8 +110,7 @@ int main(void)
   //ADS1115_updateOperationMode(&channelCero,MODE_CONTINUOUS_CONVERSION);
   //----------------------------------------------
 
-  //----------------------------------------------
-  //-----------START FUNTIONS MODE CONTINUOUS--------------
+  //------------PARA MODO CONTINUOUS----------------
   //ADS1115_startConversionPolled(&channelCero,SLAVE_ADRRES_GND);
   //----------------------------------------------
   /* Infinite loop */
@@ -129,55 +132,34 @@ int main(void)
 	  else if(i==2){
 		  channels=channelDos;
 	  }
-	  //convirtiendo=false;
+
 	  ADS1115_startConversionPolled(&channels,SLAVE_ADRRES_GND);
-
-	  //-----------------------------------
-	  //-------CONSULTANDO PIN READY-------
-	  //----ESTO LO MANDE DENTRO DE ADS1115_getConversionPolled();
-
-	 /* while(convirtiendo==false){
-
-		  if(gpioADS1115Ready_Read()==true){
-			  convirtiendo=true;
-		  }
-	  }*/
-	  //-----------------------------------
-
-
 	  wordReading=ADS1115_getConversionPolled(&channels,SLAVE_ADRRES_GND);
+
 	  BSP_LED_On(LED2);
 
 	  voltage[i]=ADS1115_getValueVoltage(&channels);
 	  }
 
-	  sendADS1115toUart(voltage);
+	  sendADS1115ByUart(voltage);
 	  //-------------------------------------------
 
 
 	  //-------------------------------------------
 	  //EJEMPLO FUNCIONAMIENTO EN MODO CONTINUO
-	  //VER COMO PONER INTERRUPCIONES Y USAR VARIOS CANALES A LA VEZ
 	  /*
-	  if(gpioADS1115Ready_Read()==true){
-		  convirtiendo=true;
-	  }
+	  wordReading=ADS1115_getConversionPolled(&channelCero,SLAVE_ADRRES_GND);
 
-	  if(convirtiendo==true){
-		  wordReading=ADS1115_getConversionPolled(&channelCero,SLAVE_ADRRES_GND);
+	  voltage[0]=ADS1115_getValueVoltage(&channelCero);
 
-		  	 voltage[0]=ADS1115_getValueVoltage(&channelCero);
-		  	convirtiendo=false;
-		  	sendADS1115toUart(voltage);
-	  }
-	  BSP_LED_Toggle(LED2);*/
+	  sendADS1115ByUart(voltage);
+	  BSP_LED_On(LED2);*/
 	  //-------------------------------------------
 
 
 	  //-------------------------------------------
 	  //EJEMPLO FUNCIONAMIENTO SIN PIN READY
 /*
-
 	  for(int i=0;i<3;i++){
 	  if (i==0){
 		  channels=channelCero;
@@ -190,10 +172,10 @@ int main(void)
 	  }
 	  wordReading=ADS1115_signalConversion(&channels,SLAVE_ADRRES_GND);
 
-	  voltage[i]=ADS1115_getConversionPolled(&channels);
+	  voltage[i]=ADS1115_getValueVoltage(&channels);
 	  }
 
-	  sendADS1115toUart(voltage);*/
+	  sendADS1115ByUart(voltage);*/
 	  //-------------------------------------------
 
 

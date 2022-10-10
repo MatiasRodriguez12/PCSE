@@ -14,7 +14,7 @@
 /*--------------------INIT FUNTIONS----------------------*/
 
 /*ADS1115_channelInit:
- *Inicializa un canal de conversion
+ *Inicializa un canal de conversión, el cual funciona sin el puerto READY del sensor.
  *Channel:SINGLE_MODE_AO,SINGLE_MODE_A1,SINGLE_MODE_A2, SINGLE_MODE_A3
  *        DIFERENTIAL_MODE_A0_A1,DIFERENTIAL_MODE_A0_A3,DIFERENTIAL_MODE_A1_A3,DIFERENTIAL_MODE_A2_A3*/
 void ADS1115_channelInit(signalADS1115 * signalADS1115_port,uint8_t channel){
@@ -29,8 +29,8 @@ void ADS1115_channelInit(signalADS1115 * signalADS1115_port,uint8_t channel){
 }
 
 /*ADS1115_channelInitPolled:
- *Inicializa un canal de conversion, el cual funciona con el puerto READY del sensor
- *Se carga los valores de umbrales adecuados para activar el funcionamiento del pin READY
+ *Inicializa un canal de conversión, el cual funciona con el puerto READY del sensor.
+ *Se carga los valores de umbrales adecuados para activar el funcionamiento del pin READY.
  *Channel:SINGLE_MODE_AO,SINGLE_MODE_A1,SINGLE_MODE_A2, SINGLE_MODE_A3
  *        DIFERENTIAL_MODE_A0_A1,DIFERENTIAL_MODE_A0_A3,DIFERENTIAL_MODE_A1_A3,DIFERENTIAL_MODE_A2_A3*/
 void ADS1115_channelInitPolled(signalADS1115 * signalADS1115_port,uint8_t channel,uint8_t slaveAddres){
@@ -50,7 +50,7 @@ void ADS1115_channelInitPolled(signalADS1115 * signalADS1115_port,uint8_t channe
 /*-----------------CONVERSION FUNTIONS-------------------*/
 
 /*ADS1115_signalConversion:
- *Funcion que inicia la conversion y devuelve el valor del misma.
+ *Función que inicia la conversion y devuelve el valor de la misma.
  *Es utilizada cuando se usa el sensor sin la intervencion del pin READY.*/
 uint16_t ADS1115_signalConversion(signalADS1115 * signalADS1115_port,uint8_t slaveAddres){
 	uint8_t wordWrite [3]={0};
@@ -58,13 +58,13 @@ uint16_t ADS1115_signalConversion(signalADS1115 * signalADS1115_port,uint8_t sla
 	uint16_t wordRead;
 
 	wordWrite[0]=CONFIG_REG;
-	wordWrite[1]=((OS_bit<<7)|signalADS1115_port->channel<<4|signalADS1115_port->pga <<1|signalADS1115_port->operationMode);
+	wordWrite[1]=((OS_BIT_CONVERSION<<7)|signalADS1115_port->channel<<4|signalADS1115_port->pga <<1|signalADS1115_port->operationMode);
 	wordWrite[2]=((signalADS1115_port->dataRate<<5)|(signalADS1115_port->comparadorMode<<4)|(signalADS1115_port->comparadorPolarity<<3)|(signalADS1115_port->latchingComparador<<2)|signalADS1115_port->stateComparator);
 	ADS1115_Transmit(slaveAddres, wordWrite,3);
 
+	ADS1115_delay(20);
 	wordWrite[0] =CONVERSION_REG;
 	ADS1115_Transmit(slaveAddres, wordWrite,1);
-	ADS1115_delay(20);
 
 	ADS1115_Receive(slaveAddres,wordReading,2);
 	wordRead=((wordReading[0]<<8)|wordReading[1]);
@@ -84,17 +84,14 @@ void ADS1115_startConversionPolled(signalADS1115 * signalADS1115_port,uint8_t sl
 	uint8_t wordWrite [3]={0};
 
 	wordWrite[0]=CONFIG_REG;
-	wordWrite[1]=((OS_bit<<7)|signalADS1115_port->channel<<4|signalADS1115_port->pga <<1|signalADS1115_port->operationMode);
+	wordWrite[1]=((OS_BIT_CONVERSION<<7)|signalADS1115_port->channel<<4|signalADS1115_port->pga <<1|signalADS1115_port->operationMode);
 	wordWrite[2]=((signalADS1115_port->dataRate<<5)|(signalADS1115_port->comparadorMode<<4)|(signalADS1115_port->comparadorPolarity<<3)|(signalADS1115_port->latchingComparador<<2)|signalADS1115_port->stateComparator);
 	ADS1115_Transmit(slaveAddres, wordWrite,3);
-
-	//wordWrite[0] =CONVERSION_REG;
-	//ADS1115_Transmit(slaveAddres, wordWrite,1);
 }
 
 /*ADS1115_getConversionPolled:
- *Funcion que lee y devuelve el valor de la conversion.
- *Es utilizada cuando se usa el sensor con la intervencion del pin READY.*/
+ *Función que devuelve el valor de la conversión.
+ *Se utiliza cuando el sensor funciona con la intervención del pin READY.*/
 uint16_t ADS1115_getConversionPolled(signalADS1115 * signalADS1115_port,uint8_t slaveAddres){
 	uint8_t wordWrite [3]={0};
 	uint16_t wordRead;
@@ -103,19 +100,21 @@ uint16_t ADS1115_getConversionPolled(signalADS1115 * signalADS1115_port,uint8_t 
 
 	  //-----------------------------------
 	  //-------CONSULTANDO PIN READY-------
+
 	  while(convirtiendo==false){
 
-		  if(gpioADS1115Ready_Read()==true){
+		  if(ADS1115_gpioReadyRead()==true){
 			  convirtiendo=true;
 		  }
 	  }
 	  //-----------------------------------
 
-	wordWrite[0] =CONVERSION_REG;
+	wordWrite[0]=CONVERSION_REG;
 	ADS1115_Transmit(slaveAddres, wordWrite,1);
 
 	ADS1115_Receive(slaveAddres,wordReading,2);
 	wordRead=((wordReading[0]<<8)|wordReading[1]);
+
 	  if (wordRead<0){
 		  wordRead=0;
 	 	  }
@@ -125,7 +124,7 @@ uint16_t ADS1115_getConversionPolled(signalADS1115 * signalADS1115_port,uint8_t 
 }
 
 /*ADS1115_getValueVoltage:
- *Funcion devuelve el valor de conversion.expresado en VOLTS (Modulo).
+ *Función devuelve el valor de conversion.expresado en VOLTS (Modulo).
  *El valor de cuenta(signo incluido) se almacena en la estructura del canal.*/
 float ADS1115_getValueVoltage(signalADS1115 * signalADS1115_port){
 	float maxVoltage=0.0;
@@ -161,11 +160,13 @@ float ADS1115_getValueVoltage(signalADS1115 * signalADS1115_port){
 		maxVoltage=0.0;
 		break;
 	}
+
 	cuenta=signalADS1115_port->countConversion;
+
 	if(signalADS1115_port->countConversion>>15){
 		cuenta=~cuenta;
-
 	}
+
 	voltage=(maxVoltage/CUENTA_MAXIMA_ADC)*cuenta;
 	return voltage;
 }
@@ -174,56 +175,56 @@ float ADS1115_getValueVoltage(signalADS1115 * signalADS1115_port){
 /*------------------UPDATE FUNTIONS----------------------*/
 
 /*ADS1115_updatePGA:
- *Funcion que actualiza la ganancia del canal(cambiando el FULL SCALE).
+ *Función que actualiza la ganancia del canal(cambiando el FULL SCALE).
  *Opciones: PGA_0, PGA_1, PGA_2, PGA_3, PGA_4, PGA_5, PGA_6, PGA_7*/
 void ADS1115_updatePGA(signalADS1115 * signalADS1115_port,uint8_t state){
 	signalADS1115_port->pga=state;
 }
 
 /*ADS1115_updateOperationMode:
- *Funcion que actualiza el modo de operacion.
+ *Función que actualiza el modo de operacion.
  *Opciones: MODE_CONTINUOUS_CONVERSION,MODE_SINGLE_SHOT*/
 void ADS1115_updateOperationMode(signalADS1115 * signalADS1115_port,uint8_t operationMode){
 	signalADS1115_port->operationMode=operationMode;
 }
 
 /*ADS1115_updateDataRate:
- *Funcion que actualiza la ganancia del canal(cambiando el FULL SCALE).
+ *Función que actualiza la ganancia del canal(cambiando el FULL SCALE).
  *Opciones: DATA_RATE_8_SPS, DATA_RATE_16_SPS, DATA_RATE_32_SPS, DATA_RATE_64_SPS, DATA_RATE_128_SPS, DATA_RATE_250_SPS, DATA_RATE_475_SPS, DATA_RATE_860_SPS*/
 void ADS1115_updateDataRate(signalADS1115 * signalADS1115_port,uint8_t dataRate){
 	signalADS1115_port->dataRate=dataRate;
 }
 
 /*ADS1115_updateComparatorMode:
- *Funcion que actualiza el valor de tipo de comparador a utilizar en el canal.
+ *Función que actualiza el valor de tipo de comparador a utilizar en el canal.
  *Opciones: COMPARATOR_WITH_HYSTEREIS, COMPARATOR_WINDOW*/
 void ADS1115_updateComparatorMode(signalADS1115 * signalADS1115_port,uint8_t comparator){
 	signalADS1115_port->comparadorMode=comparator;
 }
 
 /*ADS1115_updateComparatorPolarity:
- *Funcion que actualiza la polaridad del puerto READY/ALERT.
+ *Función que actualiza la polaridad del puerto READY/ALERT.
  *Opciones: ALERT_ACTIVE_LOW, ALERT_ACTIVE_HIGH*/
 void ADS1115_updateComparatorPolarity(signalADS1115 * signalADS1115_port,uint8_t polarity){
 	signalADS1115_port->comparadorPolarity=polarity;
 }
 
 /*ADS1115_updateLatchingComparador:
- *Funcion que habilita la funcion de latch.
+ *Función que habilita la funcion de latch.
  *Opciones: NON_LATCHING_COMP, LATCHING_COMP*/
 void ADS1115_updateLatchingComparador(signalADS1115 * signalADS1115_port,uint8_t latchingComparador){
 	signalADS1115_port->latchingComparador=latchingComparador;
 }
 
 /*ADS1115_updateStateComparator:
- *Funcion que habilita el comparador, y setea el instante en que se ejecuta el mismo.
+ *Función que habilita el comparador, y setea el instante en que se ejecuta el mismo.
  *Opciones: AFTER_ONE_CONVERSION, AFTER_TWO_CONVERSION, AFTER_FOUR_CONVERSION, DISABLE_COMPARATOR*/
 void ADS1115_updateStateComparator(signalADS1115 * signalADS1115_port,uint8_t state){
 	signalADS1115_port->stateComparator=state;
 }
 
 /*ADS1115_updateThreshold:
- *Funcion que actualiza los valores de umbrales para la comparacion.*/
+ *Función que actualiza los valores de umbrales para la comparacion.*/
 void ADS1115_updateThreshold(uint8_t slaveAddres,uint16_t umbralLow, uint16_t	umbralHigh){
 	  uint8_t wordWrite[3]={0};
 	  wordWrite[0]=LO_THRESH_REG;

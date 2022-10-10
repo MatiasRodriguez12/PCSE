@@ -33,11 +33,11 @@ void I2CGpio_init(void);
 
 /*gpioADS1115Ready_init:
  *Función que inicializa la configuración del puerto de entrada por donde se leerá la señal READY.*/
-void gpioADS1115Ready_init(void);
+void ADS1115_gpioReadyInit(void);
 
 /*gpioADS1115Ready_init:
  *Función lee el estado del puerto de entrada.*/
-bool gpioADS1115Ready_Read(void);
+bool ADS1115_gpioReadyRead(void);
 
 /*ADS1115_Transmit:
  *Función que envia datos desde el Master al Esclavo.

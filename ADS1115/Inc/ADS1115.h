@@ -9,20 +9,13 @@
 #define API_INC_ADS1115_H_
 #include <stdint.h>
 
+/*----------------------------------*/
+/*-----------SLAVE ADDRESS----------*/
 #define SLAVE_ADRRES_GND	0x48
 #define SLAVE_ADRRES_VDD	0x49
 #define SLAVE_ADRRES_SDA	0x4A
 #define SLAVE_ADRRES_SCL	0x4B
-
-#define FULL_RANGE_PG0		6.144
-#define FULL_RANGE_PG1		4.096
-#define FULL_RANGE_PG2		2.048
-#define FULL_RANGE_PG3		1.024
-#define FULL_RANGE_PG4		0.512
-#define FULL_RANGE_PG5		0.256
-#define FULL_RANGE_PG6		0.256
-#define FULL_RANGE_PG7		0.256
-#define	CUENTA_MAXIMA_ADC	32768
+/*----------------------------------*/
 
 /*----------------------------------*/
 /*---------REGISTER ADDRESS---------*/
@@ -35,7 +28,8 @@
 
 /*---------------------------------*/
 /*---------CONFIG REGISTER---------*/
-#define OS_bit				1
+#define OS_BIT_UPLOAD			0
+#define OS_BIT_CONVERSION		1
 /*---------MUX---------*/
 #define DIFERENTIAL_MODE_A0_A1	0
 #define DIFERENTIAL_MODE_A0_A3	1
@@ -88,7 +82,20 @@
 #define READY_UMBRAL_HIGH 		32768
 /*-----------------------------------*/
 
-/*-----------------------------------*/
+/*----------------------------------*/
+/*------ESCALAS DE CONVERSION-------*/
+#define FULL_RANGE_PG0		6.144
+#define FULL_RANGE_PG1		4.096
+#define FULL_RANGE_PG2		2.048
+#define FULL_RANGE_PG3		1.024
+#define FULL_RANGE_PG4		0.512
+#define FULL_RANGE_PG5		0.256
+#define FULL_RANGE_PG6		0.256
+#define FULL_RANGE_PG7		0.256
+#define	CUENTA_MAXIMA_ADC	32768
+/*----------------------------------*/
+
+/*--------------------------------------------------------------------------*/
 /*----Estructura que almacenará los parametros de un canal a utilizar-------*/
 typedef struct{
    uint8_t channel;
@@ -102,20 +109,20 @@ typedef struct{
    uint16_t countConversion;
 
 } signalADS1115;
+/*--------------------------------------------------------------------------*/
 
 /*-------------------------------------------------------*/
 /*--------------------INIT FUNTIONS----------------------*/
 
 /*ADS1115_channelInit:
- *Inicializa un canal de conversion, el cual funciona con el puerto READY del sensor
- *Se carga los valores de umbrales adecuados para activar el funcionamiento del pin READY
+ *Inicializa un canal de conversion, el cual funciona sin el puerto READY del sensor.
  *Channel:SINGLE_MODE_AO,SINGLE_MODE_A1,SINGLE_MODE_A2, SINGLE_MODE_A3
  *        DIFERENTIAL_MODE_A0_A1,DIFERENTIAL_MODE_A0_A3,DIFERENTIAL_MODE_A1_A3,DIFERENTIAL_MODE_A2_A3*/
 void ADS1115_channelInit(signalADS1115 * signalADS1115_port,uint8_t channel);
 
 /*ADS1115_channelInitPolled:
- *Inicializa un canal de conversion, el cual funciona con el puerto READY del sensor
- *Se carga los valores de umbrales adecuados para activar el funcionamiento del pin READY
+ *Inicializa un canal de conversion, el cual funciona con el puerto READY del sensor.
+ *Se carga los valores de umbrales adecuados para activar el funcionamiento del pin READY.
  *Channel:SINGLE_MODE_AO,SINGLE_MODE_A1,SINGLE_MODE_A2, SINGLE_MODE_A3
  *        DIFERENTIAL_MODE_A0_A1,DIFERENTIAL_MODE_A0_A3,DIFERENTIAL_MODE_A1_A3,DIFERENTIAL_MODE_A2_A3*/
 void ADS1115_channelInitPolled(signalADS1115 * signalADS1115_port,uint8_t channel,uint8_t slaveAddres);
@@ -124,18 +131,18 @@ void ADS1115_channelInitPolled(signalADS1115 * signalADS1115_port,uint8_t channe
 /*-----------------CONVERSION FUNTIONS-------------------*/
 
 /*ADS1115_signalConversion:
- *Función que inicia la conversion y devuelve el valor del misma.
- *Es utilizada cuando se usa el sensor sin la intervencion del pin READY.*/
+ *Función que inicia la conversión y devuelve el valor de la misma.
+ *Es utilizada cuando se usa el sensor sin la intervención del pin READY.*/
 uint16_t ADS1115_signalConversion(signalADS1115 * signalADS1115_port,uint8_t slaveAddres);
 
 /*ADS1115_startConversionPolled:
- *Función que inicia la conversion.
- *Es utilizada cuando se usa el sensor con la intervencion del pin READY.*/
+ *Función que inicia la conversión.
+ *Es utilizada cuando se usa el sensor con la intervención del pin READY.*/
 void ADS1115_startConversionPolled(signalADS1115 * signalADS1115_port,uint8_t slaveAddres);
 
 /*ADS1115_getConversionPolled:
- *Función que lee y devuelve el valor de la conversion.
- *Es utilizada cuando se usa el sensor con la intervencion del pin READY.*/
+ *Función que devuelve el valor de la conversión.
+ *Es utilizada cuando se usa el sensor con la intervención del pin READY.*/
 uint16_t ADS1115_getConversionPolled(signalADS1115 * signalADS1115_port,uint8_t slaveAddres);
 
 /*ADS1115_getValueVoltage:
