@@ -26,6 +26,7 @@ void ADS1115_channelInit(signalADS1115 * signalADS1115_port,uint8_t channel){
 	signalADS1115_port->comparadorPolarity=ALERT_ACTIVE_HIGH;
 	signalADS1115_port->latchingComparador=NON_LATCHING_COMP;
 	signalADS1115_port->stateComparator=DISABLE_COMPARATOR;
+	signalADS1115_port->countConversion=0;
 }
 
 /*ADS1115_channelInitPolled:
@@ -42,6 +43,7 @@ void ADS1115_channelInitPolled(signalADS1115 * signalADS1115_port,uint8_t channe
 	signalADS1115_port->comparadorPolarity=ALERT_ACTIVE_HIGH;
 	signalADS1115_port->latchingComparador=NON_LATCHING_COMP;
 	signalADS1115_port->stateComparator=AFTER_ONE_CONVERSION;
+	signalADS1115_port->countConversion=0;
 
 	ADS1115_updateThreshold(slaveAddres,READY_UMBRAL_LOW,READY_UMBRAL_HIGH);
 }
