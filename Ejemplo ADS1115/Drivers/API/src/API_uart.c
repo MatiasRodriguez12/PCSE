@@ -106,8 +106,11 @@ void sendADS1115ByUart(float voltage[3]){
 	 	  else if ((voltage[i]<3)){
 	 		 voltage[i]=voltage[i]-2.0;
 	 	  }
-	 	  else{
+	 	  else if ((voltage[i]<4)){
 	 		 voltage[i]=voltage[i]-3.0;
+	 	  }
+	 	  else{
+	 		 voltage[i]=voltage[i]-4.0;
 	 	  }
 
 

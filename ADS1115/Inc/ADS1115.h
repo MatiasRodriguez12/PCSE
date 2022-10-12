@@ -111,8 +111,8 @@ typedef struct{
 } signalADS1115;
 /*--------------------------------------------------------------------------*/
 
-/*-------------------------------------------------------*/
-/*--------------------INIT FUNTIONS----------------------*/
+/*--------------------------------------------------------*/
+/*--------------------INIT FUNCTIONS----------------------*/
 
 /*ADS1115_channelInit:
  *Inicializa un canal de conversion, el cual funciona sin el puerto READY del sensor.
@@ -127,8 +127,8 @@ void ADS1115_channelInit(signalADS1115 * signalADS1115_port,uint8_t channel);
  *        DIFERENTIAL_MODE_A0_A1,DIFERENTIAL_MODE_A0_A3,DIFERENTIAL_MODE_A1_A3,DIFERENTIAL_MODE_A2_A3*/
 void ADS1115_channelInitPolled(signalADS1115 * signalADS1115_port,uint8_t channel,uint8_t slaveAddres);
 
-/*-------------------------------------------------------*/
-/*-----------------CONVERSION FUNTIONS-------------------*/
+/*--------------------------------------------------------*/
+/*-----------------CONVERSION FUNCTIONS-------------------*/
 
 /*ADS1115_signalConversion:
  *Función que inicia la conversión y devuelve el valor de la misma.
@@ -146,12 +146,12 @@ void ADS1115_startConversionPolled(signalADS1115 * signalADS1115_port,uint8_t sl
 uint16_t ADS1115_getConversionPolled(signalADS1115 * signalADS1115_port,uint8_t slaveAddres);
 
 /*ADS1115_getValueVoltage:
- *Función devuelve el valor de conversion.expresado en VOLTS (Modulo).
+ *Función devuelve el valor de conversion expresado en VOLTS (Modulo).
  *El valor de cuenta(signo incluido) se almacena en la estructura del canal.*/
 float ADS1115_getValueVoltage(signalADS1115 * signalADS1115_port);
 
-/*-------------------------------------------------------*/
-/*------------------UPDATE FUNTIONS----------------------*/
+/*--------------------------------------------------------*/
+/*------------------UPDATE FUNCTIONS----------------------*/
 
 /*ADS1115_updatePGA:
  *Función que actualiza la ganancia del canal(cambiando el FULL SCALE).

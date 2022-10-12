@@ -10,8 +10,8 @@
 #include "main.h"
 #include <stdint.h>
 
-/*-------------------------------------------------------*/
-/*--------------------INIT FUNTIONS----------------------*/
+/*--------------------------------------------------------*/
+/*--------------------INIT FUNCTIONS----------------------*/
 
 /*ADS1115_channelInit:
  *Inicializa un canal de conversión, el cual funciona sin el puerto READY del sensor.
@@ -46,8 +46,8 @@ void ADS1115_channelInitPolled(signalADS1115 * signalADS1115_port,uint8_t channe
 	ADS1115_updateThreshold(slaveAddres,READY_UMBRAL_LOW,READY_UMBRAL_HIGH);
 }
 
-/*-------------------------------------------------------*/
-/*-----------------CONVERSION FUNTIONS-------------------*/
+/*--------------------------------------------------------*/
+/*-----------------CONVERSION FUNCTIONS-------------------*/
 
 /*ADS1115_signalConversion:
  *Función que inicia la conversion y devuelve el valor de la misma.
@@ -96,15 +96,15 @@ uint16_t ADS1115_getConversionPolled(signalADS1115 * signalADS1115_port,uint8_t 
 	uint8_t wordWrite [3]={0};
 	uint16_t wordRead;
 	uint8_t wordReading[2];
-	bool isConversionReady=false;
+	bool conversionReady=false;
 
 	  //-----------------------------------
 	  //-------CONSULTANDO PIN READY-------
 
-	  while(isConversionReady==false){
+	  while(conversionReady==false){
 
 		  if(ADS1115_gpioReadyRead()==true){
-			  isConversionReady=true;
+			  conversionReady=true;
 		  }
 	  }
 	  //-----------------------------------
@@ -171,8 +171,8 @@ float ADS1115_getValueVoltage(signalADS1115 * signalADS1115_port){
 	return voltage;
 }
 
-/*-------------------------------------------------------*/
-/*------------------UPDATE FUNTIONS----------------------*/
+/*--------------------------------------------------------*/
+/*------------------UPDATE FUNCTIONS----------------------*/
 
 /*ADS1115_updatePGA:
  *Función que actualiza la ganancia del canal(cambiando el FULL SCALE).
