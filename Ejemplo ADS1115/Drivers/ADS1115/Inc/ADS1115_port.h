@@ -10,7 +10,6 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "main.h"
 
 /*Puertos SDA y SCL a utilizar*/
 #define i2c_SDA_port    D14_port
@@ -24,6 +23,9 @@
 #define D15_pin  	GPIO_PIN_8
 
 /*Puerto de entrada por donde se leerá la señal READY*/
+#define READY_port	D7_port
+#define READY_pin	D7_pin
+
 #define D7_port 	GPIOF
 #define D7_pin  	GPIO_PIN_13
 

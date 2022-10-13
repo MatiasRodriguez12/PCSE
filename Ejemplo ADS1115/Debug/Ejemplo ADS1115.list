@@ -29,23 +29,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  12 .ARM.attributes 00000030  00000000  00000000  00020080  2**0
                   CONTENTS, READONLY
- 13 .debug_info   0000c543  00000000  00000000  000200b0  2**0
+ 13 .debug_info   0000c535  00000000  00000000  000200b0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_abbrev 00001e7d  00000000  00000000  0002c5f3  2**0
+ 14 .debug_abbrev 00001e7d  00000000  00000000  0002c5e5  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_aranges 00000ac0  00000000  00000000  0002e470  2**3
+ 15 .debug_aranges 00000ac0  00000000  00000000  0002e468  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_ranges 00000a00  00000000  00000000  0002ef30  2**3
+ 16 .debug_ranges 00000a00  00000000  00000000  0002ef28  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_macro  000268c7  00000000  00000000  0002f930  2**0
+ 17 .debug_macro  0002659a  00000000  00000000  0002f928  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00011ec9  00000000  00000000  000561f7  2**0
+ 18 .debug_line   000116bc  00000000  00000000  00055ec2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    000e340c  00000000  00000000  000680c0  2**0
+ 19 .debug_str    000e3430  00000000  00000000  0006757e  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000050  00000000  00000000  0014b4cc  2**0
+ 20 .comment      00000050  00000000  00000000  0014a9ae  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00002ef4  00000000  00000000  0014b51c  2**2
+ 21 .debug_frame  00002ef4  00000000  00000000  0014aa00  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1030,7 +1030,7 @@ void ADS1115_gpioReadyInit(void){
  8000968:	603b      	str	r3, [r7, #0]
  800096a:	683b      	ldr	r3, [r7, #0]
 
-	gpioButtonInit.Pin = (D7_pin);
+	gpioButtonInit.Pin = (READY_pin);
  800096c:	f44f 5300 	mov.w	r3, #8192	; 0x2000
  8000970:	607b      	str	r3, [r7, #4]
 	gpioButtonInit.Mode= GPIO_MODE_INPUT;
@@ -1043,7 +1043,7 @@ void ADS1115_gpioReadyInit(void){
  800097a:	2300      	movs	r3, #0
  800097c:	613b      	str	r3, [r7, #16]
 
-	HAL_GPIO_Init(D7_port, &gpioButtonInit);
+	HAL_GPIO_Init(READY_port, &gpioButtonInit);
  800097e:	1d3b      	adds	r3, r7, #4
  8000980:	4619      	mov	r1, r3
  8000982:	4804      	ldr	r0, [pc, #16]	; (8000994 <ADS1115_gpioReadyInit+0x58>)
@@ -1067,7 +1067,7 @@ bool ADS1115_gpioReadyRead(void){
 	bool stateButton=false;
  800099e:	2300      	movs	r3, #0
  80009a0:	71fb      	strb	r3, [r7, #7]
-	if(HAL_GPIO_ReadPin(D7_port, D7_pin)){
+	if(HAL_GPIO_ReadPin(READY_port, READY_pin)){
  80009a2:	f44f 5100 	mov.w	r1, #8192	; 0x2000
  80009a6:	4808      	ldr	r0, [pc, #32]	; (80009c8 <ADS1115_gpioReadyRead+0x30>)
  80009a8:	f000 feaa 	bl	8001700 <HAL_GPIO_ReadPin>

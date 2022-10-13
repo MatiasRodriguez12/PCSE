@@ -7,7 +7,6 @@
 
 #include "ADS1115.h"
 #include "ADS1115_port.h"
-#include "main.h"
 #include <stdint.h>
 
 /*--------------------------------------------------------*/

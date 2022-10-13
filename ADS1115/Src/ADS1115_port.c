@@ -5,6 +5,7 @@
  *      Author: MATIAS
  */
 #include "ADS1115_port.h"
+#include "main.h"
 #include <stdbool.h>
 
 
@@ -53,19 +54,19 @@ void ADS1115_gpioReadyInit(void){
 
 	__HAL_RCC_GPIOF_CLK_ENABLE();
 
-	gpioButtonInit.Pin = (D7_pin);
+	gpioButtonInit.Pin = (READY_pin);
 	gpioButtonInit.Mode= GPIO_MODE_INPUT;
 	gpioButtonInit.Pull = GPIO_PULLDOWN;
 	gpioButtonInit.Speed = GPIO_SPEED_FREQ_LOW;
 
-	HAL_GPIO_Init(D7_port, &gpioButtonInit);
+	HAL_GPIO_Init(READY_port, &gpioButtonInit);
 }
 
 /*gpioADS1115Ready_init:
  *Función lee el estado del puerto de entrada.*/
 bool ADS1115_gpioReadyRead(void){
 	bool stateButton=false;
-	if(HAL_GPIO_ReadPin(D7_port, D7_pin)){
+	if(HAL_GPIO_ReadPin(READY_port, READY_pin)){
 		stateButton=true;
 
 	}
