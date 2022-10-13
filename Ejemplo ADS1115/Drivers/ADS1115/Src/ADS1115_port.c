@@ -5,7 +5,8 @@
  *      Author: MATIAS
  */
 #include "ADS1115_port.h"
-#include "main.h"
+#include "stm32f4xx_hal.h"
+#include "stm32f4xx_nucleo_144.h"
 #include <stdbool.h>
 
 
